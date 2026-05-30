@@ -1,0 +1,63 @@
+====================================================
+ "校园管家" PyInstaller 打包发布指南
+ 对应章节 3.3 打包发布——让软件走出Python环境
+====================================================
+
+一、安装 PyInstaller
+---------------------------------
+打开命令提示符 (cmd) 或终端，输入：
+
+    pip install pyinstaller
+
+验证安装成功：
+    pyinstaller --version
+
+二、打包步骤
+---------------------------------
+1. 将 campus_manager.py 和图标文件 (.ico) 放在同一个文件夹中。
+
+2. 在文件夹地址栏输入 cmd 并回车，打开命令提示符。
+
+3. 输入以下命令并回车：
+
+    pyinstaller -F -w campus_manager.py
+
+   参数说明：
+     -F (--onefile)   将所有内容打包成一个 .exe 文件
+     -w (--windowed)  运行时不显示黑色命令行窗口 (GUI程序必须加)
+     -i (--icon)      指定自定义图标，如 -i school.ico
+
+   完整示例 (含图标)：
+     pyinstaller -F -w -i school.ico campus_manager.py
+
+三、打包后目录结构
+---------------------------------
+项目文件夹/
+  ├── build/          ← 临时构建文件 (可删除)
+  ├── dist/
+  │   └── campus_manager.exe  ← 最终的独立可执行文件 ★
+  ├── campus_manager.spec     ← 打包配置文件
+  └── campus_manager.py       ← 源代码
+
+四、避坑指南
+---------------------------------
+1. 文件路径问题：
+   打包后 .exe 的工作目录是临时的。
+   请确保输入文件 (如报名表.xlsx) 与 .exe 在同一个文件夹下。
+
+2. 依赖库遗漏：
+   如果打包后运行报错"找不到某模块"，重新打包并添加：
+   pyinstaller -F -w --hidden-import=模块名 campus_manager.py
+
+3. 文件体积太大：
+   由于包含 Python 解释器和所有依赖库 (pandas, matplotlib, tkinter),
+   .exe 文件可能达到 50MB~150MB，这属于正常现象。
+
+4. 杀毒软件误报：
+   部分杀毒软件可能将未知来源的 exe 标记为可疑程序。
+   可将 dist 文件夹添加到杀毒软件的信任列表中。
+
+五、分享使用
+---------------------------------
+将 dist/campus_manager.exe 复制给其他人即可。
+对方无需安装 Python，双击即可运行！
